@@ -5,6 +5,10 @@ class Board:
         #constructor for the board class
         #screen is a window from pygame
         #difficulty is to select easy medium or hard motherfucker
+        self.width = width
+        self.height = height
+        self.screen = screen
+        self.difficulty = difficulty
 
     def draw(self):
         pass
