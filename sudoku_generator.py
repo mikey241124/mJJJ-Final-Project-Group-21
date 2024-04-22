@@ -84,7 +84,18 @@ class SudokuGenerator:
     '''
 
     def valid_in_row(self, row, num):
-        pass
+        if row < 3:
+            index = 0
+        elif row < 6:
+            index = 3
+        elif row < 9:
+            index = 6
+        for i in range(0, 3):
+            for j in range((row % 3) * 3, ((row % 3) * 3) + 3):
+                if self.board[index][j] == num:
+                    return False
+            index += 1
+        return True
 
     '''
 	Determines if num is contained in the specified column (vertical) of the board
@@ -98,7 +109,19 @@ class SudokuGenerator:
     '''
 
     def valid_in_col(self, col, num):
-        pass
+        # If Col is in box column one
+        if col < 3:
+            index = 0
+        elif col < 6:
+            index = 1
+        elif col < 9:
+            index = 2
+        for i in range(0, 3):
+            for j in range(col % 3, 9, 3):
+                if self.board[index][j] == num:
+                    return False
+            index += 3
+        return True
 
 
 
