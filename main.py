@@ -1,6 +1,8 @@
 import sys
 import pygame as pygame
 
+from board import Board
+
 
 class Main:
     WIDTH = 1200
@@ -21,7 +23,7 @@ class Main:
         screen.fill(CREAM)
 
         title_surface = title_font.render("Sudoku", 0, BLACK)
-        title_rectangle = title_surface.get_rect(center=(WIDTH//2, HEIGHT//2 - 250))
+        title_rectangle = title_surface.get_rect(center=(WIDTH//2, HEIGHT//2 - 230))
         screen.blit(title_surface, title_rectangle)
 
         easy_surface = button_font.render("Easy", 0, BLACK)
@@ -37,17 +39,60 @@ class Main:
         screen.blit(hard_surface, hard_rectangle)
 
 
-
-        while True:
+        menu_runnning = True
+        game_type = ''
+        while menu_runnning:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if start_rectangle.collidepoint(event.pos):
-                        return
-                #elif quit_rectangle.collidepoint(event.pos):
-                #    sys.exit()
+                    if easy_rectangle.collidepoint(event.pos):
+                        menu_runnning = False
+                        game_type = "easy"
+                        print("Touching Easy Button")
+                    elif medium_rectangle.collidepoint(event.pos):
+                        menu_runnning = False
+                        game_type = "medium"
+                        print("Touching Medium Button")
+                    elif hard_rectangle.collidepoint(event.pos):
+                        menu_runnning = False
+                        game_type = "hard"
+                        print("Touching Hard Button")
             pygame.display.update()
+            if menu_runnning == False:
+                return game_type
+
+    def run_game(screen, game_type):
+        print(game_type)
+
+        WIDTH = 1200
+        HEIGHT = 800
+
+        BLACK = (0, 0, 0)
+        WHITE = (255, 255, 255)
+        RED = (50, 50, 50)
+        CREAM = (255, 253, 208)
+
+        title_font = pygame.font.Font(None, 150)
+        button_font = pygame.font.Font(None, 90)
+
+        screen.fill(CREAM)
+
+        title_surface = title_font.render("Sudoku", 0, BLACK)
+        title_rectangle = title_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 230))
+        screen.blit(title_surface, title_rectangle)
+
+        game_runnning = True
+        game_type = ''
+        while game_runnning:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    pass
+            pygame.display.update()
+            if game_runnning == False:
+                pass
 
 
     if __name__ == '__main__':
@@ -57,4 +102,8 @@ class Main:
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sudoku")
 
-        draw_game_start(screen)
+        game_type = draw_game_start(screen)
+
+        #run_game(screen, game_type)
+        board = Board(WIDTH, HEIGHT, screen, game_type)
+        board.draw
