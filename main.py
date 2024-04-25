@@ -1,6 +1,8 @@
 import sys
 import pygame as pygame
+import self as self
 
+import sudoku_generator
 from board import Board
 
 
@@ -78,12 +80,35 @@ class Main:
 
         screen.fill(CREAM)
 
-        title_surface = title_font.render("Sudoku", 0, BLACK)
-        title_rectangle = title_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 230))
-        screen.blit(title_surface, title_rectangle)
+        pygame.draw.line(screen, BLACK, (300, 100), (300, 700), 4)
+        pygame.draw.line(screen, BLACK, (900, 100), (900, 700), 4)
+        pygame.draw.line(screen, BLACK, (300, 100), (900, 100), 4)
+        pygame.draw.line(screen, BLACK, (300, 700), (900, 700), 4)
+
+        # Thick columns
+        pygame.draw.line(screen, BLACK, (500, 100), (500, 700), 4)
+        pygame.draw.line(screen, BLACK, (700, 100), (700, 700), 4)
+        # Thick rows
+        pygame.draw.line(screen, BLACK, (300, 300), (900, 300), 4)
+        pygame.draw.line(screen, BLACK, (300, 500), (900, 500), 4)
+
+        # Thin columns
+        pygame.draw.line(screen, BLACK, (366, 100), (366, 700), 2)
+        pygame.draw.line(screen, BLACK, (433, 100), (433, 700), 2)
+        pygame.draw.line(screen, BLACK, (566, 100), (566, 700), 2)
+        pygame.draw.line(screen, BLACK, (633, 100), (633, 700), 2)
+        pygame.draw.line(screen, BLACK, (766, 100), (766, 700), 2)
+        pygame.draw.line(screen, BLACK, (833, 100), (833, 700), 2)
+
+        # Thin rows
+        pygame.draw.line(screen, BLACK, (300, 166), (900, 166), 2)
+        pygame.draw.line(screen, BLACK, (300, 233), (900, 233), 2)
+        pygame.draw.line(screen, BLACK, (300, 366), (900, 366), 2)
+        pygame.draw.line(screen, BLACK, (300, 433), (900, 433), 2)
+        pygame.draw.line(screen, BLACK, (300, 566), (900, 566), 2)
+        pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
         game_runnning = True
-        game_type = ''
         while game_runnning:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -104,6 +129,7 @@ class Main:
 
         game_type = draw_game_start(screen)
 
-        #run_game(screen, game_type)
+        run_game(screen, game_type)
         board = Board(WIDTH, HEIGHT, screen, game_type)
-        board.draw
+        board.draw()
+        print(sudoku_generator.get_board(self))
