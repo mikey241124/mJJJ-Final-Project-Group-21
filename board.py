@@ -1,5 +1,7 @@
-class Board:
+import pygame
 
+
+class Board:
     def __init__(self, width, height, screen, difficulty):
         pass
         #constructor for the board class
@@ -11,7 +13,16 @@ class Board:
         self.difficulty = difficulty
 
     def draw(self):
-        pass
+        BLACK = (0, 0, 0)
+
+        # board outline
+        pygame.draw.line(self.screen, BLACK, (300, 100), (300, 700), 4)
+        pygame.draw.line(self.screen, BLACK, (900, 100), (900, 700), 4)
+        pygame.draw.line(self.screen, BLACK, (300, 100), (900, 100), 4)
+        pygame.draw.line(self.screen, BLACK, (300, 700), (900, 700), 4)
+
+        # Thick columns
+        pygame.draw.line(self.screen, BLACK, (500, 100), (500, 700), 4)
         #draws outline of sudoku grid, bold lines to seperate 3x3 blocks
         #draws every cell on board
 
