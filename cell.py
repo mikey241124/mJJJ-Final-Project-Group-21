@@ -10,11 +10,13 @@ class Cell:
         #Constructor for the cell class
 
     def set_cell_value(self, value):
-        return value
+        self.value = value
+        return self.value
         #setter for this cell's value
 
     def set_sketched_value(self, value):
-        return value
+        self.value = value
+        return self.value
         #setter for this sells sketched value
 
     def draw(self):
