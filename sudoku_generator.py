@@ -1,7 +1,6 @@
 import math, random
 from math import sqrt
 
-
 class SudokuGenerator:
 
     row_length = 9
@@ -26,8 +25,16 @@ class SudokuGenerator:
     def __init__(self, row_length, removed_cells):
         self.row_length = row_length
         self.removed_cells = removed_cells
-        self.board = generate_sudoku(row_length, removed_cells)
-        self.box_length = sqrt(row_length)
+        self.board = [[0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0],
+                      [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+        self.box_length = int(sqrt(row_length))
 
     '''
 	Returns a 2D python list of numbers which represents the board
@@ -236,37 +243,37 @@ class SudokuGenerator:
     '''
 
     def remove_cells(self):
-        if Main.game_type == "easy":
+        if self.removed_cells == 30:
             value = 0
             while True:
                 j = random.randint(0, 8)
                 k = random.randint(0, 8)
                 if self.board[j][k] == 0:
-                    return
+                    continue
                 else:
                     self.board[j][k] = 0
                     value += 1
                 if value == 30:
                     break
-        elif Main.game_type == "medium":
+        elif self.removed_cells == 40:
             value = 0
             while True:
                 j = random.randint(0, 8)
                 k = random.randint(0, 8)
                 if self.board[j][k] == 0:
-                    return
+                    continue
                 else:
                     self.board[j][k] = 0
                     value += 1
                 if value == 40:
                     break
-        elif Main.game_type == "hard":
+        elif self.removed_cells == 50:
             value = 0
             while True:
                 j = random.randint(0, 8)
                 k = random.randint(0, 8)
                 if self.board[j][k] == 0:
-                    return
+                    continue
                 else:
                     self.board[j][k] = 0
                     value += 1

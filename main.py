@@ -1,6 +1,8 @@
 import sys
 import pygame as pygame
-import self as self
+#import self as self
+from sudoku_generator import SudokuGenerator
+from sudoku_generator import generate_sudoku
 
 import sudoku_generator
 from board import Board
@@ -67,6 +69,20 @@ class Main:
     def run_game(screen, game_type):
         print(game_type)
 
+        #Get the Sudoku Board from Sudoku Generator
+        # Generate an Easy Board
+        if game_type == 'easy':
+            board_list = generate_sudoku(9, 30)
+        # Generate a Medium Board
+        elif game_type == 'medium':
+            board_list = generate_sudoku(9, 40)
+        # Generate a Hard Board
+        elif game_type == 'hard':
+            board_list = generate_sudoku(9, 50)
+
+        print(board_list)
+
+
         WIDTH = 1200
         HEIGHT = 800
 
@@ -77,6 +93,7 @@ class Main:
 
         title_font = pygame.font.Font(None, 150)
         button_font = pygame.font.Font(None, 90)
+        number_font = pygame.font.SysFont('Comic Sans MS', 35)
 
         screen.fill(CREAM)
 
@@ -109,12 +126,23 @@ class Main:
         pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
         game_runnning = True
+
+        #Put the Sudoku Board onto the Pygame Board
+        silly = number_font.render("2", True, (0, 0, 0))
+        #screen.blit(silly, (456, 110))
+        for i in range(0, len(board_list)):
+            for j in range(0, len(board_list[0])):
+                if board_list[i][j] != 0:
+                    value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
+                    screen.blit(value, ((j+1) *66 +258, (i+1)*66 + 47))
+
+
         while game_runnning:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    print("Mouse clicked.")
             pygame.display.update()
             if game_runnning == False:
                 pass
@@ -122,7 +150,6 @@ class Main:
 
     if __name__ == '__main__':
         game_over = False
-
         pygame.init()
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sudoku")
@@ -132,4 +159,4 @@ class Main:
         run_game(screen, game_type)
         board = Board(WIDTH, HEIGHT, screen, game_type)
         board.draw()
-        print(sudoku_generator.get_board(self))
+
