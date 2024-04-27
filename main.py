@@ -147,14 +147,14 @@ class Main:
         exit_button_data = button_font.render("EXIT", 0, BROWN)
         exit_button = exit_button_data.get_rect(center=(145, 600))
         screen.blit(exit_button_data, exit_button)
-        button_font = pygame.font.Font(None, 90)
 
         # Loop while the Sudoku game is ongoing
         counter = 0
         x_pos = 0
         y_pos = 0
-        temp_num = 0
-        print(board_list)
+
+        drawn_nums = []
+
         while game_running:
             counter = counter + 1
 
@@ -203,7 +203,6 @@ class Main:
 #                                screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
 
                 if event.type == pygame.KEYDOWN:
-                    print("Keyboard type detected.")
                     # sees if an arrow key is pressed
                     if keyboard.is_pressed('left arrow'):
                         if x_pos > 0:
@@ -223,34 +222,33 @@ class Main:
                         # check for user keyboard input
                         if keyboard.is_pressed('1'):
                             temp_num = 1
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('2'):
                             temp_num = 2
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('3'):
                             temp_num = 3
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('4'):
                             temp_num = 4
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('5'):
                             temp_num = 5
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('6'):
                             temp_num = 6
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('7'):
                             temp_num = 7
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('8'):
                             temp_num = 8
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('9'):
                             temp_num = 9
+                            drawn_nums.append([x_pos, y_pos, temp_num])
                         else:
                             print("User tried to update board with invalid value.")
-
-                        print("I am working")
-                        print(y_pos, x_pos)
-                        print(temp_num)
-                        print(board_list[y_pos][x_pos])
-
-                        number_font = pygame.font.SysFont('Comic Sans MS', 65)
-                        #Try to program something to render a number.
-                        number_font = pygame.font.SysFont('Comic Sans MS', 35)
-                        print("I tried")
 
             screen.fill(CREAM)
 
@@ -394,6 +392,16 @@ class Main:
                 pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 106),
                                  ((x * 66) + 372, (y * 66) + 172), 4)
             pygame.display.update()
+
+            for i in range(0, len(drawn_nums)):
+                temp_arr = drawn_nums[i]
+                temp_x = temp_arr[0]
+                temp_y = temp_arr[1]
+                temp_num = temp_arr[2]
+                num_font = pygame.font.Font(None, 40)
+                num_surface = num_font.render(str(temp_num), 0, BLACK)
+                number_rectangle = num_surface.get_rect(center=(300 + (temp_x * 66), 100 + (temp_y * 66)))
+                screen.blit(num_surface, number_rectangle)
 
             if lost:
                 screen.fill(CREAM)
