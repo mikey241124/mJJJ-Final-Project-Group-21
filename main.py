@@ -65,8 +65,6 @@ class Main:
                 return game_type
 
     def run_game(screen, game_type):
-        print(game_type)
-
         lost = False
         won = False
         is_board_full = False
@@ -311,7 +309,7 @@ class Main:
                             if board_list == solution:
                                 won = True
                             else:
-                                lost = True
+                                game_running = False
 
 
             screen.fill(CREAM)
@@ -469,27 +467,27 @@ class Main:
                 number_rectangle = num_surface.get_rect(center=(300 + (temp_x * 66), 100 + (temp_y * 66)))
                 screen.blit(num_surface, number_rectangle)
 
-            if lost:
-                print("I'm running")
-                screen.fill(CREAM)
-
-                lost_surface = title_font.render("Game Over :(", 0, BLACK)
-                lost_rectangle = lost_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
-                screen.blit(lost_surface, lost_rectangle)
-
-                restart_surface = button_font.render("RESTART", 0, BLACK)
-                restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
-                screen.blit(restart_surface, restart_rectangle)
-                print(pygame.event.get())
-                while True:
-                    for event in pygame.event.get():
-                        if event.type == pygame.QUIT:
-                            sys.exit()
-                        if event.type == pygame.MOUSEBUTTONDOWN:
-                            print("Mouse clicked")
-                            if restart_rectangle.collidepoint(event.pos):
-                                # restarting the game goes here
-                                game_running = False
+            # if lost:
+            #     print("I'm running")
+            #     screen.fill(CREAM)
+            #
+            #     lost_surface = title_font.render("Game Over :(", 0, BLACK)
+            #     lost_rectangle = lost_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
+            #     screen.blit(lost_surface, lost_rectangle)
+            #
+            #     restart_surface = button_font.render("RESTART", 0, BLACK)
+            #     restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+            #     screen.blit(restart_surface, restart_rectangle)
+            #     print(pygame.event.get())
+            #     while True:
+            #         for event in pygame.event.get():
+            #             if event.type == pygame.QUIT:
+            #                 sys.exit()
+            #             if event.type == pygame.MOUSEBUTTONDOWN:
+            #                 print("Mouse clicked")
+            #                 if restart_rectangle.collidepoint(event.pos):
+            #                     # restarting the game goes here
+            #                     game_running = False
 
             if won:
                 screen.fill(CREAM)
@@ -509,6 +507,39 @@ class Main:
                         if exit_rectangle.collidepoint(event.pos):
                             sys.exit()
 
+    def hello(screen):
+        WIDTH = 1200
+        HEIGHT = 800
+
+        BLACK = (0, 0, 0)
+        CREAM = (255, 253, 208)
+
+        title_font = pygame.font.Font(None, 150)
+        button_font = pygame.font.Font(None, 90)
+
+        screen.fill(CREAM)
+
+        title_surface = title_font.render("Game Over", 0, BLACK)
+        title_rectangle = title_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 230))
+        screen.blit(title_surface, title_rectangle)
+
+        medium_surface = button_font.render("Restart", 0, BLACK)
+        medium_rectangle = medium_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 70))
+        screen.blit(medium_surface, medium_rectangle)
+
+        menu_running = True
+
+        while menu_running:
+            for event in pygame.event.get():
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if medium_rectangle.collidepoint(event.pos):
+                        menu_running = False
+                        game_type = "medium"
+                        print("Touching Medium Button")
+            pygame.display.update()
+            if not menu_running:
+                return game_type
+
     if __name__ == '__main__':
         game_over = False
         pygame.init()
@@ -518,4 +549,4 @@ class Main:
         while True:
             game_type = draw_game_start(screen)
             run_game(screen, game_type)
-            print("Starting new game")
+            end = hello(screen)
