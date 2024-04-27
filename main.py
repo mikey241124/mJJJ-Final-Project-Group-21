@@ -2,6 +2,7 @@ import sys
 import pygame as pygame
 # from pynput import keyboard
 import keyboard
+from cell import Cell
 
 import sudoku_generator
 from sudoku_generator import generate_sudoku
