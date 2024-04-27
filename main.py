@@ -75,14 +75,14 @@ class Main:
         #Get the Sudoku Board from Sudoku Generator
         # Generate an Easy Board
         if game_type == 'easy':
-            board_list = generate_sudoku(9, 30)
+            solution, board_list = generate_sudoku(9, 30)
         # Generate a Medium Board
         elif game_type == 'medium':
-            board_list = generate_sudoku(9, 40)
+            solution, board_list = generate_sudoku(9, 40)
         # Generate a Hard Board
         elif game_type == 'hard':
-            board_list = generate_sudoku(9, 50)
-
+            solution, board_list = generate_sudoku(9, 50)
+        print(solution)
         print(board_list)
 
 
@@ -164,6 +164,7 @@ class Main:
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if restart_rectangle.collidepoint(event.pos):
                             #restarting the game goes here
+                            pass
 
             if won:
                 screen.fill(CREAM)
