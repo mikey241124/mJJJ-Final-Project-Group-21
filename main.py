@@ -152,23 +152,10 @@ class Main:
         counter = 0
         x_pos = 0
         y_pos = 0
+        temp_num = 0
+        print(board_list)
         while game_running:
             counter = counter + 1
-            # sees if an arrow key is pressed
-            if counter > 30:
-                if keyboard.is_pressed('left arrow'):
-                    if x_pos > 0:
-                        x_pos = x_pos - 1
-                if keyboard.is_pressed('up arrow'):
-                    if y_pos > 0:
-                        y_pos = y_pos - 1
-                if keyboard.is_pressed('right arrow'):
-                    if x_pos < 8:
-                        x_pos = x_pos + 1
-                if keyboard.is_pressed('down arrow'):
-                    if y_pos < 8:
-                        y_pos = y_pos + 1
-                counter = 0
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -199,16 +186,70 @@ class Main:
                             x_pos = x
                             y_pos = y
 
-                            def find_zero_positions(unsolved_list):
-                                zero_positions = []
-                                for row_index, row in enumerate(unsolved_list):
-                                    for col_index, num in enumerate(row):
-                                        if num == 0:
-                                            zero_positions.append([row_index, col_index])
-                                return zero_positions
 
-                            if [x, y] in find_zero_positions(original_board):
-                                # this is where to write the code for allowing people to sketch and enter
+#                            def find_zero_positions(unsolved_list):
+#                                zero_positions = []
+#                                for row_index, row in enumerate(unsolved_list):
+#                                    for col_index, num in enumerate(row):
+#                                        if num == 0:
+#                                            zero_positions.append([row_index, col_index])
+#                                return zero_positions
+#
+#                           if [x, y] in find_zero_positions(original_board):
+#                                # this is where to write the code for allowing people to sketch and enter
+#                                if
+#                                num = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
+#                                screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
+
+                if event.type == pygame.KEYDOWN:
+                    print("Keyboard type detected.")
+                    # sees if an arrow key is pressed
+                    if keyboard.is_pressed('left arrow'):
+                        if x_pos > 0:
+                            x_pos = x_pos - 1
+                    if keyboard.is_pressed('up arrow'):
+                        if y_pos > 0:
+                            y_pos = y_pos - 1
+                    if keyboard.is_pressed('right arrow'):
+                        if x_pos < 8:
+                            x_pos = x_pos + 1
+                    if keyboard.is_pressed('down arrow'):
+                        if y_pos < 8:
+                            y_pos = y_pos + 1
+
+                    # display sketch if space is valid
+                    if board_list[y_pos][x_pos] == 0:
+                        # check for user keyboard input
+                        if keyboard.is_pressed('1'):
+                            temp_num = 1
+                        elif keyboard.is_pressed('2'):
+                            temp_num = 2
+                        elif keyboard.is_pressed('3'):
+                            temp_num = 3
+                        elif keyboard.is_pressed('4'):
+                            temp_num = 4
+                        elif keyboard.is_pressed('5'):
+                            temp_num = 5
+                        elif keyboard.is_pressed('6'):
+                            temp_num = 6
+                        elif keyboard.is_pressed('7'):
+                            temp_num = 7
+                        elif keyboard.is_pressed('8'):
+                            temp_num = 8
+                        elif keyboard.is_pressed('9'):
+                            temp_num = 9
+                        else:
+                            print("User tried to update board with invalid value.")
+
+                        print("I am working")
+                        print(y_pos, x_pos)
+                        print(temp_num)
+                        print(board_list[y_pos][x_pos])
+
+                        number_font = pygame.font.SysFont('Comic Sans MS', 65)
+                        #Try to program something to render a number.
+                        number_font = pygame.font.SysFont('Comic Sans MS', 35)
+                        print("I tried")
 
             screen.fill(CREAM)
 
