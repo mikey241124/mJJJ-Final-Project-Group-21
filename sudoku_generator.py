@@ -1,5 +1,6 @@
 import math, random
 from math import sqrt
+from copy import copy, deepcopy
 
 class SudokuGenerator:
 
@@ -301,7 +302,7 @@ Return: list[list] (a 2D Python list to represent the board)
 def generate_sudoku(size, removed):
     sudoku = SudokuGenerator(size, removed)
     sudoku.fill_values()
-    solved_board = sudoku.get_board()
+    solved_board = deepcopy(sudoku.get_board())
     sudoku.remove_cells()
     unsolved_board = sudoku.get_board()
     return solved_board, unsolved_board

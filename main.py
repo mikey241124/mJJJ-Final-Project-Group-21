@@ -82,8 +82,6 @@ class Main:
         # Generate a Hard Board
         elif game_type == 'hard':
             solution, board_list = generate_sudoku(9, 50)
-        print(solution)
-        print(board_list)
 
 
         WIDTH = 1200
