@@ -1,10 +1,8 @@
 import sys
 import pygame as pygame
-import matplotlib.pyplot as plt
-import numpy as np
+# from pynput import keyboard
+import keyboard
 from sudoku_generator import generate_sudoku
-import sudoku_generator
-from board import Board
 
 
 class Main:
@@ -148,14 +146,34 @@ class Main:
         screen.blit(exit_button_data, exit_button)
         button_font = pygame.font.Font(None, 90)
 
-        #Loop while the Sudoku game is ongoing
+        # Loop while the Sudoku game is ongoing
+        counter = 0
+        x_pos = 0
+        y_pos = 0
         while game_running:
+            counter = counter + 1
+            # sees if an arrow key is pressed
+            if counter > 30:
+                if keyboard.is_pressed('left arrow'):
+                    if x_pos > 0:
+                        x_pos = x_pos - 1
+                if keyboard.is_pressed('up arrow'):
+                    if y_pos > 0:
+                        y_pos = y_pos - 1
+                if keyboard.is_pressed('right arrow'):
+                    if x_pos < 8:
+                        x_pos = x_pos + 1
+                if keyboard.is_pressed('down arrow'):
+                    if y_pos < 8:
+                        y_pos = y_pos + 1
+                counter = 0
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
 
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    #Check if buttons were pressed
+                    # Check if buttons were pressed
                     if reset_button.collidepoint(event.pos):
                         print("Reset button pressed")
                         print("Imma program this later")
@@ -166,64 +184,7 @@ class Main:
                         print("Exit button pressed")
                         sys.exit()
 
-                    screen.fill(CREAM)
-
-                    pygame.draw.line(screen, BLACK, (300, 100), (300, 700), 4)
-                    pygame.draw.line(screen, BLACK, (900, 100), (900, 700), 4)
-                    pygame.draw.line(screen, BLACK, (300, 100), (900, 100), 4)
-                    pygame.draw.line(screen, BLACK, (300, 700), (900, 700), 4)
-
-                    # Thick columns
-                    pygame.draw.line(screen, BLACK, (500, 100), (500, 700), 4)
-                    pygame.draw.line(screen, BLACK, (700, 100), (700, 700), 4)
-                    # Thick rows
-                    pygame.draw.line(screen, BLACK, (300, 300), (900, 300), 4)
-                    pygame.draw.line(screen, BLACK, (300, 500), (900, 500), 4)
-
-                    # Thin columns
-                    pygame.draw.line(screen, BLACK, (366, 100), (366, 700), 2)
-                    pygame.draw.line(screen, BLACK, (433, 100), (433, 700), 2)
-                    pygame.draw.line(screen, BLACK, (566, 100), (566, 700), 2)
-                    pygame.draw.line(screen, BLACK, (633, 100), (633, 700), 2)
-                    pygame.draw.line(screen, BLACK, (766, 100), (766, 700), 2)
-                    pygame.draw.line(screen, BLACK, (833, 100), (833, 700), 2)
-
-                    # Thin rows
-                    pygame.draw.line(screen, BLACK, (300, 166), (900, 166), 2)
-                    pygame.draw.line(screen, BLACK, (300, 233), (900, 233), 2)
-                    pygame.draw.line(screen, BLACK, (300, 366), (900, 366), 2)
-                    pygame.draw.line(screen, BLACK, (300, 433), (900, 433), 2)
-                    pygame.draw.line(screen, BLACK, (300, 566), (900, 566), 2)
-                    pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
-
-                    #Print the Board
-                    if user_reset:
-                        #Print the original board and reset variables
-                        pass
-                    else:
-                        #Print the ongoing board
-                        for i in range(0, len(board_list)):
-                            for j in range(0, len(board_list[0])):
-                                if board_list[i][j] != 0:
-                                    value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
-                                    screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
-
-                    # Display Reset, Restart, and Exit Buttons
-                    button_font = pygame.font.Font(None, 70)
-                    # Display Reset Button
-                    reset_button_data = button_font.render("RESET", 0, BROWN)
-                    reset_button = reset_button_data.get_rect(center=(145, 200))
-                    screen.blit(reset_button_data, reset_button)
-                    # Display Restart Button
-                    restart_button_data = button_font.render("RESTART", 0, BROWN)
-                    restart_button = restart_button_data.get_rect(center=(145, 400))
-                    screen.blit(restart_button_data, restart_button)
-                    # Display Exit Button
-                    exit_button_data = button_font.render("EXIT", 0, BROWN)
-                    exit_button = exit_button_data.get_rect(center=(145, 600))
-                    screen.blit(exit_button_data, exit_button)
-                    button_font = pygame.font.Font(None, 90)
-
+                    # get mouse position when clicking and draw a square
                     pos = pygame.mouse.get_pos()
                     x = pos[0]
                     y = pos[1]
@@ -233,87 +194,150 @@ class Main:
                         if y >= 0 and y <= 600:
                             x = int(x / 66)
                             y = int(y / 66)
-                            if (x / 3) <= 1 and (y / 3) <= 1:  # 1
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 100),
-                                                 ((x * 66) + 368, (y * 66) + 100), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 166),
-                                                 ((x * 66) + 368, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 100),
-                                                 ((x * 66) + 302, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 100),
-                                                 ((x * 66) + 368, (y * 66) + 166), 4)
-                            elif 2 >= (x / 3) > 1 >= (y / 3):
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 100),
-                                                 ((x * 66) + 370, (y * 66) + 100), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 166),
-                                                 ((x * 66) + 370, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 100),
-                                                 ((x * 66) + 304, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 100),
-                                                 ((x * 66) + 370, (y * 66) + 166), 4)
-                            elif 2 < (x / 3) <= 3 and (y / 3) <= 1:
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 100),
-                                                 ((x * 66) + 372, (y * 66) + 100), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 166),
-                                                 ((x * 66) + 372, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 100),
-                                                 ((x * 66) + 306, (y * 66) + 166), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 100),
-                                                 ((x * 66) + 372, (y * 66) + 166), 4)
-                            elif (x / 3) <= 1 < (y / 3) <= 2:  # 2
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 103),
-                                                 ((x * 66) + 368, (y * 66) + 103), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 169),
-                                                 ((x * 66) + 368, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 103),
-                                                 ((x * 66) + 302, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 103),
-                                                 ((x * 66) + 368, (y * 66) + 169), 4)
-                            elif 1 < (x / 3) <= 2 and 1 < (y / 3) <= 2:
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 103),
-                                                 ((x * 66) + 370, (y * 66) + 103), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 169),
-                                                 ((x * 66) + 370, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 103),
-                                                 ((x * 66) + 304, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 103),
-                                                 ((x * 66) + 370, (y * 66) + 169), 4)
-                            elif 3 >= (x / 3) > 2 >= (y / 3) > 1:
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 103),
-                                                 ((x * 66) + 372, (y * 66) + 103), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 169),
-                                                 ((x * 66) + 372, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 103),
-                                                 ((x * 66) + 306, (y * 66) + 169), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 103),
-                                                 ((x * 66) + 372, (y * 66) + 169), 4)
-                            elif (x / 3) <= 1 and 2 < (y / 3) <= 3:  # 3
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 106),
-                                                 ((x * 66) + 368, (y * 66) + 106), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 172),
-                                                 ((x * 66) + 368, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 106),
-                                                 ((x * 66) + 302, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 106),
-                                                 ((x * 66) + 368, (y * 66) + 172), 4)
-                            elif 1 < (x / 3) <= 2 < (y / 3) <= 3:
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 106),
-                                                 ((x * 66) + 370, (y * 66) + 106), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 172),
-                                                 ((x * 66) + 370, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 106),
-                                                 ((x * 66) + 304, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 106),
-                                                 ((x * 66) + 370, (y * 66) + 172), 4)
-                            elif 2 < (x / 3) <= 3 and 2 < (y / 3) <= 3:
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 106),
-                                                 ((x * 66) + 372, (y * 66) + 106), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 172),
-                                                 ((x * 66) + 372, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 106),
-                                                 ((x * 66) + 306, (y * 66) + 172), 4)
-                                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 106),
-                                                 ((x * 66) + 372, (y * 66) + 172), 4)
+                            x_pos = x
+                            y_pos = y
+
+            screen.fill(CREAM)
+
+            pygame.draw.line(screen, BLACK, (300, 100), (300, 700), 4)
+            pygame.draw.line(screen, BLACK, (900, 100), (900, 700), 4)
+            pygame.draw.line(screen, BLACK, (300, 100), (900, 100), 4)
+            pygame.draw.line(screen, BLACK, (300, 700), (900, 700), 4)
+
+            # Thick columns
+            pygame.draw.line(screen, BLACK, (500, 100), (500, 700), 4)
+            pygame.draw.line(screen, BLACK, (700, 100), (700, 700), 4)
+            # Thick rows
+            pygame.draw.line(screen, BLACK, (300, 300), (900, 300), 4)
+            pygame.draw.line(screen, BLACK, (300, 500), (900, 500), 4)
+
+            # Thin columns
+            pygame.draw.line(screen, BLACK, (366, 100), (366, 700), 2)
+            pygame.draw.line(screen, BLACK, (433, 100), (433, 700), 2)
+            pygame.draw.line(screen, BLACK, (566, 100), (566, 700), 2)
+            pygame.draw.line(screen, BLACK, (633, 100), (633, 700), 2)
+            pygame.draw.line(screen, BLACK, (766, 100), (766, 700), 2)
+            pygame.draw.line(screen, BLACK, (833, 100), (833, 700), 2)
+
+            # Thin rows
+            pygame.draw.line(screen, BLACK, (300, 166), (900, 166), 2)
+            pygame.draw.line(screen, BLACK, (300, 233), (900, 233), 2)
+            pygame.draw.line(screen, BLACK, (300, 366), (900, 366), 2)
+            pygame.draw.line(screen, BLACK, (300, 433), (900, 433), 2)
+            pygame.draw.line(screen, BLACK, (300, 566), (900, 566), 2)
+            pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
+
+            # Print the Board
+            if user_reset:
+                # Print the original board and reset variables
+                pass
+            else:
+                # Print the ongoing board
+                for i in range(0, len(board_list)):
+                    for j in range(0, len(board_list[0])):
+                        if board_list[i][j] != 0:
+                            value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
+                            screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
+
+            # Display Reset, Restart, and Exit Buttons
+            button_font = pygame.font.Font(None, 70)
+            # Display Reset Button
+            reset_button_data = button_font.render("RESET", 0, BROWN)
+            reset_button = reset_button_data.get_rect(center=(145, 200))
+            screen.blit(reset_button_data, reset_button)
+            # Display Restart Button
+            restart_button_data = button_font.render("RESTART", 0, BROWN)
+            restart_button = restart_button_data.get_rect(center=(145, 400))
+            screen.blit(restart_button_data, restart_button)
+            # Display Exit Button
+            exit_button_data = button_font.render("EXIT", 0, BROWN)
+            exit_button = exit_button_data.get_rect(center=(145, 600))
+            screen.blit(exit_button_data, exit_button)
+            button_font = pygame.font.Font(None, 90)
+
+            x = x_pos
+            y = y_pos
+            if (x / 3) <= 1 and (y / 3) <= 1:  # 1
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 100),
+                                 ((x * 66) + 368, (y * 66) + 100), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 166),
+                                 ((x * 66) + 368, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 100),
+                                 ((x * 66) + 302, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 100),
+                                 ((x * 66) + 368, (y * 66) + 166), 4)
+            elif 2 >= (x / 3) > 1 >= (y / 3):
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 100),
+                                 ((x * 66) + 370, (y * 66) + 100), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 166),
+                                 ((x * 66) + 370, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 100),
+                                 ((x * 66) + 304, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 100),
+                                 ((x * 66) + 370, (y * 66) + 166), 4)
+            elif 2 < (x / 3) <= 3 and (y / 3) <= 1:
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 100),
+                                 ((x * 66) + 372, (y * 66) + 100), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 166),
+                                 ((x * 66) + 372, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 100),
+                                 ((x * 66) + 306, (y * 66) + 166), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 100),
+                                 ((x * 66) + 372, (y * 66) + 166), 4)
+            elif (x / 3) <= 1 < (y / 3) <= 2:  # 2
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 103),
+                                 ((x * 66) + 368, (y * 66) + 103), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 169),
+                                 ((x * 66) + 368, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 103),
+                                 ((x * 66) + 302, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 103),
+                                 ((x * 66) + 368, (y * 66) + 169), 4)
+            elif 1 < (x / 3) <= 2 and 1 < (y / 3) <= 2:
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 103),
+                                 ((x * 66) + 370, (y * 66) + 103), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 169),
+                                 ((x * 66) + 370, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 103),
+                                 ((x * 66) + 304, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 103),
+                                 ((x * 66) + 370, (y * 66) + 169), 4)
+            elif 3 >= (x / 3) > 2 >= (y / 3) > 1:
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 103),
+                                 ((x * 66) + 372, (y * 66) + 103), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 169),
+                                 ((x * 66) + 372, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 103),
+                                 ((x * 66) + 306, (y * 66) + 169), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 103),
+                                 ((x * 66) + 372, (y * 66) + 169), 4)
+            elif (x / 3) <= 1 and 2 < (y / 3) <= 3:  # 3
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 106),
+                                 ((x * 66) + 368, (y * 66) + 106), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 172),
+                                 ((x * 66) + 368, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 302, (y * 66) + 106),
+                                 ((x * 66) + 302, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 368, (y * 66) + 106),
+                                 ((x * 66) + 368, (y * 66) + 172), 4)
+            elif 1 < (x / 3) <= 2 < (y / 3) <= 3:
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 106),
+                                 ((x * 66) + 370, (y * 66) + 106), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 172),
+                                 ((x * 66) + 370, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 304, (y * 66) + 106),
+                                 ((x * 66) + 304, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 370, (y * 66) + 106),
+                                 ((x * 66) + 370, (y * 66) + 172), 4)
+            elif 2 < (x / 3) <= 3 and 2 < (y / 3) <= 3:
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 106),
+                                 ((x * 66) + 372, (y * 66) + 106), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 172),
+                                 ((x * 66) + 372, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 306, (y * 66) + 106),
+                                 ((x * 66) + 306, (y * 66) + 172), 4)
+                pygame.draw.line(screen, BROWN, ((x * 66) + 372, (y * 66) + 106),
+                                 ((x * 66) + 372, (y * 66) + 172), 4)
             pygame.display.update()
 
             if lost:
