@@ -305,4 +305,4 @@ def generate_sudoku(size, removed):
     solved_board = deepcopy(sudoku.get_board())
     sudoku.remove_cells()
     unsolved_board = sudoku.get_board()
-    return solved_board, unsolved_board
+    return solved_board, unsolved_board, unsolved_board
