@@ -1,7 +1,7 @@
 import sys
 import pygame as pygame
-#import self as self
-from sudoku_generator import SudokuGenerator
+import matplotlib.pyplot as plt
+import numpy as np
 from sudoku_generator import generate_sudoku
 
 import sudoku_generator
@@ -17,8 +17,6 @@ class Main:
         HEIGHT = 800
 
         BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        RED = (50, 50, 50)
         CREAM = (255, 253, 208)
 
         title_font = pygame.font.Font(None, 150)
@@ -42,28 +40,28 @@ class Main:
         hard_rectangle = hard_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 180))
         screen.blit(hard_surface, hard_rectangle)
 
-
-        menu_runnning = True
+        menu_running = True
         game_type = ''
-        while menu_runnning:
+
+        while menu_running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if easy_rectangle.collidepoint(event.pos):
-                        menu_runnning = False
+                        menu_running = False
                         game_type = "easy"
                         print("Touching Easy Button")
                     elif medium_rectangle.collidepoint(event.pos):
-                        menu_runnning = False
+                        menu_running = False
                         game_type = "medium"
                         print("Touching Medium Button")
                     elif hard_rectangle.collidepoint(event.pos):
-                        menu_runnning = False
+                        menu_running = False
                         game_type = "hard"
                         print("Touching Hard Button")
             pygame.display.update()
-            if menu_runnning == False:
+            if not menu_running:
                 return game_type
 
     def run_game(screen, game_type):
@@ -72,7 +70,7 @@ class Main:
         lost = False
         won = False
 
-        #Get the Sudoku Board from Sudoku Generator
+        # Get the Sudoku Board from Sudoku Generator
         # Generate an Easy Board
         if game_type == 'easy':
             solution, board_list = generate_sudoku(9, 30)
@@ -83,7 +81,6 @@ class Main:
         elif game_type == 'hard':
             solution, board_list = generate_sudoku(9, 50)
 
-
         WIDTH = 1200
         HEIGHT = 800
 
@@ -91,6 +88,7 @@ class Main:
         WHITE = (255, 255, 255)
         RED = (50, 50, 50)
         CREAM = (255, 253, 208)
+        BROWN = (165, 42, 42)
 
         title_font = pygame.font.Font(None, 150)
         button_font = pygame.font.Font(None, 90)
@@ -128,14 +126,14 @@ class Main:
 
         game_runnning = True
 
-        #Put the Sudoku Board onto the Pygame Board
+        # Put the Sudoku Board onto the Pygame Board
         silly = number_font.render("2", True, (0, 0, 0))
-        #screen.blit(silly, (456, 110))
+        # screen.blit(silly, (456, 110))
         for i in range(0, len(board_list)):
             for j in range(0, len(board_list[0])):
                 if board_list[i][j] != 0:
                     value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
-                    screen.blit(value, ((j+1) *66 +258, (i+1)*66 + 47))
+                    screen.blit(value, ((j+1) * 66 + 258, (i+1)*66 + 47))
 
         while game_runnning:
             for event in pygame.event.get():
@@ -143,8 +141,23 @@ class Main:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     print("Mouse clicked.")
+                    pos = pygame.mouse.get_pos()
+                    x = pos[0]
+                    y = pos[1]
+                    x = x - 300
+                    y = y - 100
+                    if 0 <= x <= 600:
+                        if y >= 0 and y <= 600:
+                            x = int(x / 66)
+                            y = int(y / 66)
+                            print(x)
+                            print(y)
+                            pygame.draw.line(screen, BROWN, ((x * 66) + 300, (y * 66) + 100), ((x * 66) + 368, (y * 66) + 100), 8)
+                            pygame.draw.line(screen, BROWN, ((x * 66) + 300, (y * 66) + 166), ((x * 66) + 366, (y * 66) + 166), 8)
+                            pygame.draw.line(screen, BROWN, ((x * 66) + 300, (y * 66) + 100), ((x * 66) + 300, (y * 66) + 166), 8)
+                            pygame.draw.line(screen, BROWN, ((x * 66) + 366, (y * 66) + 100), ((x * 66) + 366, (y * 66) + 166), 8)
             pygame.display.update()
-            if game_runnning == False:
+            if not game_runnning:
                 pass
 
             if lost:
@@ -161,7 +174,7 @@ class Main:
                 for event in pygame.event.get():
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if restart_rectangle.collidepoint(event.pos):
-                            #restarting the game goes here
+                            # restarting the game goes here
                             pass
 
             if won:
