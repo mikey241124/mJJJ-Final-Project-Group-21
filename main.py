@@ -69,6 +69,9 @@ class Main:
     def run_game(screen, game_type):
         print(game_type)
 
+        lost = False
+        won = False
+
         #Get the Sudoku Board from Sudoku Generator
         # Generate an Easy Board
         if game_type == 'easy':
@@ -136,7 +139,6 @@ class Main:
                     value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
                     screen.blit(value, ((j+1) *66 +258, (i+1)*66 + 47))
 
-
         while game_runnning:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -146,6 +148,38 @@ class Main:
             pygame.display.update()
             if game_runnning == False:
                 pass
+
+            if lost:
+                screen.fill(CREAM)
+
+                lost_surface = title_font.render("Game Over :(", 0, BLACK)
+                lost_rectangle = lost_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
+                screen.blit(lost_surface, lost_rectangle)
+
+                restart_surface = button_font.render("RESTART", 0, BLACK)
+                restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+                screen.blit(restart_surface, restart_rectangle)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if restart_rectangle.collidepoint(event.pos):
+                            #restarting the game goes here
+
+            if won:
+                screen.fill(CREAM)
+
+                won_surface = title_font.render("Game Won!", 0, BLACK)
+                won_rectangle = won_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
+                screen.blit(won_surface, won_rectangle)
+
+                exit_surface = button_font.render("EXIT", 0, BLACK)
+                exit_rectangle = exit_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+                screen.blit(exit_surface, exit_rectangle)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if exit_rectangle.collidepoint(event.pos):
+                            sys.exit()
 
 
     if __name__ == '__main__':
