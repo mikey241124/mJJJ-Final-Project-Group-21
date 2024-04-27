@@ -69,6 +69,7 @@ class Main:
 
         lost = False
         won = False
+        is_board_full = False
 
         # Get the Sudoku Board from Sudoku Generator
         # Generate an Easy Board
@@ -157,7 +158,7 @@ class Main:
 
         while game_running:
             counter = counter + 1
-
+            is_board_full = True
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     sys.exit()
@@ -220,38 +221,103 @@ class Main:
                     # display sketch if space is valid
                     if board_list[y_pos][x_pos] == 0:
                         # check for user keyboard input
+                        count = 0
                         if keyboard.is_pressed('1'):
                             temp_num = 1
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            # check if number already present in drawn_nums
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count+=1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('2'):
                             temp_num = 2
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('3'):
                             temp_num = 3
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('4'):
                             temp_num = 4
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('5'):
                             temp_num = 5
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('6'):
                             temp_num = 6
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('7'):
                             temp_num = 7
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('8'):
                             temp_num = 8
-                            drawn_nums.append([x_pos, y_pos, temp_num])
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
                         elif keyboard.is_pressed('9'):
                             temp_num = 9
-                            drawn_nums.append([x_pos, y_pos, temp_num])
-                        else:
-                            print("User tried to update board with invalid value.")
+                            for i in range(len(drawn_nums)):
+                                if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                    drawn_nums[i][2] = temp_num
+                                    count += 1
+                            if count < 1:
+                                drawn_nums.append([x_pos, y_pos, temp_num])
+
+                    # Check if user clicks enter key
+                    if keyboard.is_pressed('enter'):
+                       # look for index in temp nums
+                        for i in range(len(drawn_nums)):
+                            if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
+                                board_list[y_pos][x_pos] = drawn_nums[i][2]
+                        # check for a winner board
+                        for i in range(len(board_list)):
+                            if 0 in board_list[i]:
+                                is_board_full = False
+                        if is_board_full:
+                            game_running = False
+                            if board_list == solution:
+                                won = True
+                            else:
+                                lost = True
+
 
             screen.fill(CREAM)
-
+            for mini_list in drawn_nums:
+                value = number_font.render(str(mini_list[2]), True, (0, 0, 255))
+                screen.blit(value, ((mini_list[0] + 1) * 66 + 258, (mini_list[1] + 1) * 66 + 47))
             pygame.draw.line(screen, BLACK, (300, 100), (300, 700), 4)
             pygame.draw.line(screen, BLACK, (900, 100), (900, 700), 4)
             pygame.draw.line(screen, BLACK, (300, 100), (900, 100), 4)
@@ -404,6 +470,7 @@ class Main:
                 screen.blit(num_surface, number_rectangle)
 
             if lost:
+                print("I'm running")
                 screen.fill(CREAM)
 
                 lost_surface = title_font.render("Game Over :(", 0, BLACK)
@@ -413,12 +480,16 @@ class Main:
                 restart_surface = button_font.render("RESTART", 0, BLACK)
                 restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
                 screen.blit(restart_surface, restart_rectangle)
-
-                for event in pygame.event.get():
-                    if event.type == pygame.MOUSEBUTTONDOWN:
-                        if restart_rectangle.collidepoint(event.pos):
-                            # restarting the game goes here
-                            game_running = False
+                print(pygame.event.get())
+                while True:
+                    for event in pygame.event.get():
+                        if event.type == pygame.QUIT:
+                            sys.exit()
+                        if event.type == pygame.MOUSEBUTTONDOWN:
+                            print("Mouse clicked")
+                            if restart_rectangle.collidepoint(event.pos):
+                                # restarting the game goes here
+                                game_running = False
 
             if won:
                 screen.fill(CREAM)
@@ -432,6 +503,8 @@ class Main:
                 screen.blit(exit_surface, exit_rectangle)
 
                 for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
                     if event.type == pygame.MOUSEBUTTONDOWN:
                         if exit_rectangle.collidepoint(event.pos):
                             sys.exit()
@@ -445,3 +518,4 @@ class Main:
         while True:
             game_type = draw_game_start(screen)
             run_game(screen, game_type)
+            print("Starting new game")
