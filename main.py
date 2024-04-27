@@ -124,8 +124,9 @@ class Main:
         pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
         game_running = True
+        user_reset = False
 
-        # Put the Sudoku Board onto the Pygame Board
+        # Put the Initial Sudoku Board onto the Pygame Board
         for i in range(0, len(board_list)):
             for j in range(0, len(board_list[0])):
                 if board_list[i][j] != 0:
@@ -147,6 +148,7 @@ class Main:
         screen.blit(exit_button_data, exit_button)
         button_font = pygame.font.Font(None, 90)
 
+        #Loop while the Sudoku game is ongoing
         while game_running:
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -195,11 +197,16 @@ class Main:
                     pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
                     #Print the Board
-                    for i in range(0, len(board_list)):
-                        for j in range(0, len(board_list[0])):
-                            if board_list[i][j] != 0:
-                                value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
-                                screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
+                    if user_reset:
+                        #Print the original board and reset variables
+                        pass
+                    else:
+                        #Print the ongoing board
+                        for i in range(0, len(board_list)):
+                            for j in range(0, len(board_list[0])):
+                                if board_list[i][j] != 0:
+                                    value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
+                                    screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
 
                     # Display Reset, Restart, and Exit Buttons
                     button_font = pygame.font.Font(None, 70)
