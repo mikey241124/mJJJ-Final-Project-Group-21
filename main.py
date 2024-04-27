@@ -3,7 +3,7 @@ import pygame as pygame
 # from pynput import keyboard
 import keyboard
 from cell import Cell
-
+from copy import deepcopy
 import sudoku_generator
 from sudoku_generator import generate_sudoku
 
@@ -165,7 +165,10 @@ class Main:
                     # Check if buttons were pressed
                     if reset_button.collidepoint(event.pos):
                         print("Reset button pressed")
-                        print("Imma program this later")
+                        print(original_board)
+                        board_list = deepcopy(original_board)
+                        print(board_list)
+                        drawn_nums = []
                     elif restart_button.collidepoint(event.pos):
                         print("Restart button pressed")
                         game_running = False
