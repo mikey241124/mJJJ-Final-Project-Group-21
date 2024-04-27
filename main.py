@@ -2,6 +2,8 @@ import sys
 import pygame as pygame
 # from pynput import keyboard
 import keyboard
+
+import sudoku_generator
 from sudoku_generator import generate_sudoku
 
 
@@ -196,6 +198,17 @@ class Main:
                             y = int(y / 66)
                             x_pos = x
                             y_pos = y
+
+                            def find_zero_positions(unsolved_list):
+                                zero_positions = []
+                                for row_index, row in enumerate(unsolved_list):
+                                    for col_index, num in enumerate(row):
+                                        if num == 0:
+                                            zero_positions.append([row_index, col_index])
+                                return zero_positions
+
+                            if [x, y] in find_zero_positions(original_board):
+                                # this is where to write the code for allowing people to sketch and enter
 
             screen.fill(CREAM)
 
