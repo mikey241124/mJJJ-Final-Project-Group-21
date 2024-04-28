@@ -165,13 +165,12 @@ class Main:
                     # Check if buttons were pressed
                     if reset_button.collidepoint(event.pos):
                         print("Reset button pressed")
-                        print(original_board)
+                        print(solution)
                         board_list = deepcopy(original_board)
-                        print(board_list)
                         drawn_nums = []
                     elif restart_button.collidepoint(event.pos):
                         print("Restart button pressed")
-                        return 0
+                        game_running = False
                     elif exit_button.collidepoint(event.pos):
                         print("Exit button pressed")
                         sys.exit()
@@ -223,7 +222,7 @@ class Main:
                     if board_list[y_pos][x_pos] == 0:
                         # check for user keyboard input
                         count = 0
-                        if keyboard.is_pressed('1'):
+                        if event.key == pygame.K_1:
                             temp_num = 1
                             # check if number already present in drawn_nums
                             for i in range(len(drawn_nums)):
@@ -232,7 +231,7 @@ class Main:
                                     count+=1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('2'):
+                        elif event.key == pygame.K_2:
                             temp_num = 2
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -240,7 +239,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('3'):
+                        elif event.key == pygame.K_3:
                             temp_num = 3
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -248,7 +247,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('4'):
+                        elif event.key == pygame.K_4:
                             temp_num = 4
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -256,7 +255,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('5'):
+                        elif event.key == pygame.K_5:
                             temp_num = 5
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -264,7 +263,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('6'):
+                        elif event.key == pygame.K_6:
                             temp_num = 6
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -272,7 +271,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('7'):
+                        elif event.key == pygame.K_7:
                             temp_num = 7
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -280,7 +279,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('8'):
+                        elif event.key == pygame.K_8:
                             temp_num = 8
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -288,7 +287,7 @@ class Main:
                                     count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
-                        elif keyboard.is_pressed('9'):
+                        elif event.key == pygame.K_9:
                             temp_num = 9
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
@@ -308,10 +307,13 @@ class Main:
                             if 0 in board_list[i]:
                                 is_board_full = False
                         if is_board_full:
+                            game_running = False
                             if board_list == solution:
-                                return 1
+                                won = True
+                                print("You won!")
                             else:
-                                return 2
+                                won = True
+                                game_running = False
 
 
             screen.fill(CREAM)
@@ -347,16 +349,11 @@ class Main:
             pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
             # Print the Board
-            if user_reset:
-                # Print the original board and reset variables
-                pass
-            else:
-                # Print the ongoing board
-                for i in range(0, len(board_list)):
-                    for j in range(0, len(board_list[0])):
-                        if board_list[i][j] != 0:
-                            value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
-                            screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
+            for i in range(0, len(board_list)):
+                for j in range(0, len(board_list[0])):
+                    if board_list[i][j] != 0:
+                        value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
+                        screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
 
             # Display Reset, Restart, and Exit Buttons
             button_font = pygame.font.Font(None, 70)
@@ -469,7 +466,47 @@ class Main:
                 number_rectangle = num_surface.get_rect(center=(300 + (temp_x * 66), 100 + (temp_y * 66)))
                 screen.blit(num_surface, number_rectangle)
 
-    def hello(screen):
+            # if lost:
+            #     print("I'm running")
+            #     screen.fill(CREAM)
+            #
+            #     lost_surface = title_font.render("Game Over :(", 0, BLACK)
+            #     lost_rectangle = lost_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
+            #     screen.blit(lost_surface, lost_rectangle)
+            #
+            #     restart_surface = button_font.render("RESTART", 0, BLACK)
+            #     restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+            #     screen.blit(restart_surface, restart_rectangle)
+            #     print(pygame.event.get())
+            #     while True:
+            #         for event in pygame.event.get():
+            #             if event.type == pygame.QUIT:
+            #                 sys.exit()
+            #             if event.type == pygame.MOUSEBUTTONDOWN:
+            #                 print("Mouse clicked")
+            #                 if restart_rectangle.collidepoint(event.pos):
+            #                     # restarting the game goes here
+            #                     game_running = False
+
+            if won:
+                screen.fill(CREAM)
+
+                won_surface = title_font.render("Game Won!", 0, BLACK)
+                won_rectangle = won_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
+                screen.blit(won_surface, won_rectangle)
+
+                exit_surface = button_font.render("EXIT", 0, BLACK)
+                exit_rectangle = exit_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+                screen.blit(exit_surface, exit_rectangle)
+
+                for event in pygame.event.get():
+                    if event.type == pygame.QUIT:
+                        sys.exit()
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        if exit_rectangle.collidepoint(event.pos):
+                            sys.exit()
+
+    def game_lost(screen):
         WIDTH = 1200
         HEIGHT = 800
 
@@ -493,38 +530,16 @@ class Main:
 
         while menu_running:
             for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if medium_rectangle.collidepoint(event.pos):
                         menu_running = False
                         game_type = "medium"
                         print("Touching Medium Button")
             pygame.display.update()
-    def bonjour(screen):
-        WIDTH = 1200
-        HEIGHT = 800
-
-        BLACK = (0, 0, 0)
-        CREAM = (255, 253, 208)
-
-        title_font = pygame.font.Font(None, 150)
-        button_font = pygame.font.Font(None, 90)
-
-        screen.fill(CREAM)
-
-        won_surface = title_font.render("Game Won!", 0, BLACK)
-        won_rectangle = won_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
-        screen.blit(won_surface, won_rectangle)
-
-        exit_surface = button_font.render("EXIT", 0, BLACK)
-        exit_rectangle = exit_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
-        screen.blit(exit_surface, exit_rectangle)
-
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if exit_rectangle.collidepoint(event.pos):
-                    sys.exit()
+            if not menu_running:
+                return game_type
 
     if __name__ == '__main__':
         game_over = False
@@ -534,8 +549,5 @@ class Main:
 
         while True:
             game_type = draw_game_start(screen)
-            result = run_game(screen, game_type)
-            if result == 1:
-                bonjour(screen)
-            if result == 2:
-                hello(screen)
+            run_game(screen, game_type)
+            end = game_lost(screen)
