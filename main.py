@@ -1,10 +1,7 @@
 import sys
 import pygame as pygame
-# from pynput import keyboard
 import keyboard
-from cell import Cell
 from copy import deepcopy
-import sudoku_generator
 from sudoku_generator import generate_sudoku
 
 
@@ -65,9 +62,7 @@ class Main:
                 return game_type
 
     def run_game(screen, game_type):
-        lost = False
         won = False
-        is_board_full = False
 
         # Get the Sudoku Board from Sudoku Generator
         # Generate an Easy Board
@@ -84,13 +79,10 @@ class Main:
         HEIGHT = 800
 
         BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        RED = (50, 50, 50)
         CREAM = (255, 253, 208)
         BROWN = (165, 42, 42)
 
         title_font = pygame.font.Font(None, 150)
-        button_font = pygame.font.Font(None, 90)
         number_font = pygame.font.SysFont('Comic Sans MS', 35)
 
         screen.fill(CREAM)
@@ -124,7 +116,6 @@ class Main:
         pygame.draw.line(screen, BLACK, (300, 633), (900, 633), 2)
 
         game_running = True
-        user_reset = False
 
         # Put the Initial Sudoku Board onto the Pygame Board
         for i in range(0, len(board_list)):
@@ -132,17 +123,18 @@ class Main:
                 if board_list[i][j] != 0:
                     value = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
                     screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
+
         # Display Reset, Restart, and Exit Buttons
         button_font = pygame.font.Font(None, 70)
-        #Display Reset Button
-        reset_button_data = button_font.render("RESET",0, BROWN)
+        # Display Reset Button
+        reset_button_data = button_font.render("RESET", 0, BROWN)
         reset_button = reset_button_data.get_rect(center=(145, 200))
         screen.blit(reset_button_data, reset_button)
-        #Display Restart Button
+        # Display Restart Button
         restart_button_data = button_font.render("RESTART", 0, BROWN)
         restart_button = restart_button_data.get_rect(center=(145, 400))
         screen.blit(restart_button_data, restart_button)
-        #Display Exit Button
+        # Display Exit Button
         exit_button_data = button_font.render("EXIT", 0, BROWN)
         exit_button = exit_button_data.get_rect(center=(145, 600))
         screen.blit(exit_button_data, exit_button)
@@ -170,7 +162,7 @@ class Main:
                         drawn_nums = []
                     elif restart_button.collidepoint(event.pos):
                         print("Restart button pressed")
-                        game_running = False
+                        return 0
                     elif exit_button.collidepoint(event.pos):
                         print("Exit button pressed")
                         sys.exit()
@@ -187,21 +179,6 @@ class Main:
                             y = int(y / 66)
                             x_pos = x
                             y_pos = y
-
-
-#                            def find_zero_positions(unsolved_list):
-#                                zero_positions = []
-#                                for row_index, row in enumerate(unsolved_list):
-#                                    for col_index, num in enumerate(row):
-#                                        if num == 0:
-#                                            zero_positions.append([row_index, col_index])
-#                                return zero_positions
-#
-#                           if [x, y] in find_zero_positions(original_board):
-#                                # this is where to write the code for allowing people to sketch and enter
-#                                if
-#                                num = number_font.render(str(board_list[i][j]), True, (0, 0, 0))
-#                                screen.blit(value, ((j + 1) * 66 + 258, (i + 1) * 66 + 47))
 
                 if event.type == pygame.KEYDOWN:
                     # sees if an arrow key is pressed
@@ -228,7 +205,7 @@ class Main:
                             for i in range(len(drawn_nums)):
                                 if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
                                     drawn_nums[i][2] = temp_num
-                                    count+=1
+                                    count += 1
                             if count < 1:
                                 drawn_nums.append([x_pos, y_pos, temp_num])
                         elif event.key == pygame.K_2:
@@ -298,7 +275,7 @@ class Main:
 
                     # Check if user clicks enter key
                     if keyboard.is_pressed('enter'):
-                       # look for index in temp nums
+                        # look for index in temp nums
                         for i in range(len(drawn_nums)):
                             if drawn_nums[i][0] == x_pos and drawn_nums[i][1] == y_pos:
                                 board_list[y_pos][x_pos] = drawn_nums[i][2]
@@ -309,12 +286,9 @@ class Main:
                         if is_board_full:
                             game_running = False
                             if board_list == solution:
-                                won = True
-                                print("You won!")
+                                return 1
                             else:
-                                won = True
-                                game_running = False
-
+                                return 2
 
             screen.fill(CREAM)
             for mini_list in drawn_nums:
@@ -466,28 +440,6 @@ class Main:
                 number_rectangle = num_surface.get_rect(center=(300 + (temp_x * 66), 100 + (temp_y * 66)))
                 screen.blit(num_surface, number_rectangle)
 
-            # if lost:
-            #     print("I'm running")
-            #     screen.fill(CREAM)
-            #
-            #     lost_surface = title_font.render("Game Over :(", 0, BLACK)
-            #     lost_rectangle = lost_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 150))
-            #     screen.blit(lost_surface, lost_rectangle)
-            #
-            #     restart_surface = button_font.render("RESTART", 0, BLACK)
-            #     restart_rectangle = restart_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
-            #     screen.blit(restart_surface, restart_rectangle)
-            #     print(pygame.event.get())
-            #     while True:
-            #         for event in pygame.event.get():
-            #             if event.type == pygame.QUIT:
-            #                 sys.exit()
-            #             if event.type == pygame.MOUSEBUTTONDOWN:
-            #                 print("Mouse clicked")
-            #                 if restart_rectangle.collidepoint(event.pos):
-            #                     # restarting the game goes here
-            #                     game_running = False
-
             if won:
                 screen.fill(CREAM)
 
@@ -506,7 +458,7 @@ class Main:
                         if exit_rectangle.collidepoint(event.pos):
                             sys.exit()
 
-    def game_lost(screen):
+    def hello(screen):
         WIDTH = 1200
         HEIGHT = 800
 
@@ -535,11 +487,44 @@ class Main:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if medium_rectangle.collidepoint(event.pos):
                         menu_running = False
-                        game_type = "medium"
-                        print("Touching Medium Button")
             pygame.display.update()
-            if not menu_running:
-                return game_type
+
+    def win_screen_run(screen):
+        WIDTH = 1200
+        HEIGHT = 800
+
+        BLACK = (0, 0, 0)
+        CREAM = (255, 253, 208)
+
+        title_font = pygame.font.Font(None, 150)
+        button_font = pygame.font.Font(None, 90)
+
+        screen.fill(CREAM)
+
+        title_surface = title_font.render("Game Won!", 0, BLACK)
+        title_rectangle = title_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 - 230))
+        screen.blit(title_surface, title_rectangle)
+
+        medium_surface = button_font.render("Play Again", 0, BLACK)
+        medium_rectangle = medium_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
+        screen.blit(medium_surface, medium_rectangle)
+
+        hard_surface = button_font.render("exit", 0, BLACK)
+        hard_rectangle = hard_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 20))
+        screen.blit(hard_surface, hard_rectangle)
+
+        menu_running = True
+
+        while menu_running:
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    if medium_rectangle.collidepoint(event.pos):
+                        return True
+                    if hard_rectangle.collidepoint(event.pos):
+                        return False
+            pygame.display.update()
 
     if __name__ == '__main__':
         game_over = False
@@ -547,7 +532,14 @@ class Main:
         screen = pygame.display.set_mode((WIDTH, HEIGHT))
         pygame.display.set_caption("Sudoku")
 
-        while True:
+        run_code = True
+
+        while run_code:
             game_type = draw_game_start(screen)
-            run_game(screen, game_type)
-            end = game_lost(screen)
+            end_condition = run_game(screen, game_type)
+            if end_condition == 1:
+                keep_going = win_screen_run(screen)
+                if not keep_going:
+                    run_code = False
+            elif end_condition == 2:
+                hello(screen)
