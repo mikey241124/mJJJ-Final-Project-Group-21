@@ -156,15 +156,11 @@ class Main:
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     # Check if buttons were pressed
                     if reset_button.collidepoint(event.pos):
-                        print("Reset button pressed")
-                        print(solution)
                         board_list = deepcopy(original_board)
                         drawn_nums = []
                     elif restart_button.collidepoint(event.pos):
-                        print("Restart button pressed")
                         return 0
                     elif exit_button.collidepoint(event.pos):
-                        print("Exit button pressed")
                         sys.exit()
 
                     # get mouse position when clicking and draw a square
@@ -509,7 +505,7 @@ class Main:
         medium_rectangle = medium_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 150))
         screen.blit(medium_surface, medium_rectangle)
 
-        hard_surface = button_font.render("exit", 0, BLACK)
+        hard_surface = button_font.render("Exit", 0, BLACK)
         hard_rectangle = hard_surface.get_rect(center=(WIDTH // 2, HEIGHT // 2 + 20))
         screen.blit(hard_surface, hard_rectangle)
 
